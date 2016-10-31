@@ -1,69 +1,68 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta name="viewport" content="user-scalable=no,width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <head>
+        <meta name="viewport" content="user-scalable=no,width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+        <meta name="apple-mobile-web-app-capable" content="yes">
 
-    <!--                                     -->
-    <!-- Mobile application                  -->
-    <!-- to display the weather in real time -->
-    <!--                                     -->
-    <!-- George Fisher                       -->
-    <!-- https://github.com/grfiv/weather    -->
-    <!--                                     -->
-    <title>Real-Time Weather</title>
+        <!--                                     -->
+        <!-- Mobile application                  -->
+        <!-- to display the weather in real time -->
+        <!--                                     -->
+        <!-- George Fisher                       -->
+        <!-- https://github.com/grfiv/weather    -->
+        <!--                                     -->
+        <title>Real-Time Weather</title>
 
-    <!-- jQuery -->
-    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <!-- jQuery -->
+        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 
-    <!-- jQuery Mobile -->
-    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
-    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        <!-- jQuery Mobile -->
+        <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+        <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 
-    <!-- jQuery Template -->
-    <script src="js/jquery.loadTemplate.min.js"></script> <!-- https://github.com/codepb/jquery-template -->
+        <!-- jQuery Template -->
+        <script src="js/jquery.loadTemplate.min.js"></script> <!-- https://github.com/codepb/jquery-template -->
 
-    <!-- Meteocons http://www.alessioatzeni.com/meteocons/ -->
-    <link rel="stylesheet" href="css/stylesheet.css">
+        <!-- Meteocons -->
+        <link rel="stylesheet" href="css/stylesheet.css"> <!-- http://www.alessioatzeni.com/meteocons/  -->
 
-</head>
-<body>
+    </head>
 
-    <div data-role="page">
+    <body>
 
-        <!-- left-side panel -->
-        <div data-role="panel" id="left-panel" data-theme="c">
-            <ul data-role="listview" data-theme="d">
-                <li data-icon="delete"><a href="#" data-rel="close">Close</a></li>
-                <li data-role="list-divider">Select a City</li>
-                <li><a href="#" class="city" data-rel="close">Current Location</a> </li>
-                <li><a href="#" class="city" data-rel="close">Boston</a> </li>
-                <li><a href="#" class="city" data-rel="close">Haddonfield</a> </li>
-                <li><a href="#" class="city" data-rel="close">Newtown</a> </li>
-            </ul>
-        </div><!-- /panel -->
+        <section data-role="page">
 
-        <!-- header, main, footer -->
-        <div data-role="header" data-position="fixed" data-theme="c">
-            <h1>Real-Time Weather</h1>
-            <a href="#left-panel" data-role="button" data-icon="bars" data-iconpos="notext" data-iconshadow="false">Menu</a>
-        </div>
+            <!-- left-side panel -->
+            <aside data-role="panel" id="left-panel" data-theme="c">
+                <ul data-role="listview" data-theme="a">
+                    <li data-icon="delete"><a href="#" data-rel="close">Close</a></li>
+                    <li data-role="list-divider">Select a City</li>
+                    <li><a href="#" class="city" data-rel="close">Current Location</a> </li>
+                    <li><a href="#" class="city" data-rel="close">Boston</a> </li>
+                    <li><a href="#" class="city" data-rel="close">Haddonfield</a> </li>
+                    <li><a href="#" class="city" data-rel="close">Newtown</a> </li>
+                </ul>
+            </aside>
 
-        <div data-role="content" class="ui-content">
-            <h1 id="current_temp" class="icon" data-icon="#">65&#176;F</h1>
-            <p id="current_summary">Partly Cloudy</p>
-            <p id="location">Current Location</p>
-        </div>
+            <!-- header, content of the main page -->
+            <header data-role="header" data-position="fixed" data-theme="c">
+                <h1>Real-Time Weather</h1>
+                <a href="#left-panel" data-role="button" data-icon="bars" data-iconpos="notext" data-iconshadow="false">Menu</a>
+            </header>
 
+            <main data-role="content" class="ui-content">
+                <h1 id="current_temp" class="icon" data-icon="#">65&#176;F</h1>
+                <p id="current_summary">Partly Cloudy</p>
+                <p id="location">Current Location</p>
+            </main>
 
-    </div>
+        </section>
 
-<script>
+        <script>
+            $(document).ready(function () {
 
-    $(document).ready(function () {
+            });
+        </script>
 
-    });
-</script>
-
-</body>
+    </body>
 </html>
