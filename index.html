@@ -3,6 +3,7 @@
     <head>
         <meta name="viewport" content="user-scalable=no,width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
         <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="apple-touch-icon" href="images/icon.png">
 
         <!--                                     -->
         <!-- Mobile application                  -->
@@ -39,8 +40,12 @@
                     <li data-role="list-divider">Select a City</li>
                     <li><a href="#" class="city" data-rel="close">Current Location</a> </li>
                     <li><a href="#" class="city" data-rel="close">Boston</a> </li>
-                    <li><a href="#" class="city" data-rel="close">Haddonfield</a> </li>
                     <li><a href="#" class="city" data-rel="close">Newtown</a> </li>
+                    <li><a href="#" class="city" data-rel="close">Haddonfield</a> </li>
+                    <li><a href="#" class="city" data-rel="close">Washington DC</a> </li>
+                    <li><a href="#" class="city" data-rel="close">Grasslands National Park</a> </li>
+                    <li><a href="#" class="city" data-rel="close">Machu Picchu</a> </li>
+                    <li><a href="#" class="city" data-rel="close">Mount Everest</a> </li>
                 </ul>
             </aside>
 
@@ -59,7 +64,86 @@
         </section>
 
         <script>
+
+            var cities = {  "washington dc" : { coords : { latitude : 38.882786, longitude : -77.109812}},
+                            "haddonfield" :   { coords : { latitude : 39.889464, longitude : -75.042394}},
+                            "newtown" :       { coords : { latitude : 40.230926, longitude : -74.932682}},
+                            "boston" :        { coords : { latitude : 42.374894, longitude : -71.050674}},
+                 "grasslands national park" : { coords : { latitude : 49.125097, longitude : -107.421332}},
+                            "mount everest" : { coords : { latitude : 27.987850, longitude : 86.925026}},
+                            "machu picchu" :  { coords : { latitude : -13.163141, longitude : -72.544963}},
+                            "current location" : ""
+                         };
+
+            var icons = {   "clear-day" : "B",
+                            "clear-night" : "C",
+                            "rain " : "R",
+                            "snow" : "W",
+                            "sleet" : "U",
+                            "wind" : "S",
+                            "fog" : "E",
+                            "cloudy" : "N",
+                            "partly-cloudy-day" : "H",
+                            "partly-cloudy-night" : "4",
+                            "hail" : "X",
+                            "thunderstorm" : "O",
+                            "tornado" : "F"
+                        };
+
+            function loadCity(city) {
+                $("#location").html(city);
+
+                if (city.toLowerCase() == "current location") {
+                    if (navigator.geolocation) {
+                        // call the HTML5 geolocation api: callbacks success, failure
+                        //
+                        // note this warning (October 2016)
+                        // getCurrentPosition() and watchPosition() no longer work on insecure origins.
+                        // To use this feature, you should consider switching your application to a secure origin,
+                        // such as HTTPS. See https://goo.gl/rStTGz for more details.
+                        navigator.geolocation.getCurrentPosition(loadWeather, loadDefaultCity);
+                    } else {
+                        loadDefaultCity();
+                    }
+                } else {
+                    loadWeather(cities[city.toLowerCase()]);
+                }
+            }
+
+            function loadDefaultCity() {
+                loadCity("Boston");
+            }
+
+            function loadWeather(cityCoords) {
+
+                var lat = cityCoords.coords.latitude;
+                var lon = cityCoords.coords.longitude;
+
+                $.ajax({
+                    url: 'weather_api.php',                  //the script to call to get data
+                    data: "lat=" + lat + "&lon=" + lon,                        //you can insert url argumnets here to pass to api.php
+                    dataType: 'json',                //data format
+                    success: function(json)          //on recieve of reply
+                    {
+                        console.log(json);
+                        $("#current_temp").html("&nbsp;&nbsp;" + Math.round(json.currently.temperature)+"&#176;F");
+                        $("#current_summary").html(json.currently.summary);
+                        $("#current_temp").attr("data-icon", icons[json.currently.icon]);
+                    },
+                    error: function(e) {
+                        console.log(e.message);
+                    }
+                });
+            }
+
             $(document).ready(function () {
+
+                loadCity("Boston");
+
+                // change the city onclick of any a.city anchor
+                $("a.city").bind("click", function() {
+                   loadCity($(this).html());
+                });
 
             });
         </script>
