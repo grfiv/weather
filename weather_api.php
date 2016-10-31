@@ -29,12 +29,18 @@ include("inc/dark-sky-api-call.php");
 $remote_ip_parts    = explode (".", $_SERVER['REMOTE_ADDR']);
 $localhost_ip_parts = explode (".", LOCALHOST);
 $isp_ip_parts       = explode (".", MY_ISP);
+$vpn_east_ip_parts  = explode (".", VPN_EAST);
+$cmct_boston_parts  = explode (".", COMCAST_BOSTON);
 
 if (($remote_ip_parts[0] != $localhost_ip_parts[0]) &&
+    ($remote_ip_parts[0] != $vpn_east_ip_parts[0]) &&
+    ($remote_ip_parts[0] != $cmct_boston_parts[0]) &&
     ($remote_ip_parts[0] != $isp_ip_parts[0])) exit;
 
-if ($remote_ip_parts[1] != $localhost_ip_parts[1] &&
-    $remote_ip_parts[1] != $isp_ip_parts[1]) exit;
+if (($remote_ip_parts[1] != $localhost_ip_parts[1]) &&
+    ($remote_ip_parts[1] != $vpn_east_ip_parts[1]) &&
+    ($remote_ip_parts[1] != $cmct_boston_parts[1]) &&
+    ($remote_ip_parts[1] != $isp_ip_parts[1])) exit;
 
 # build out the api call url
 # ==========================
