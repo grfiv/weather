@@ -3,7 +3,7 @@
     <head>
         <meta name="viewport" content="user-scalable=no,width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
         <meta name="apple-mobile-web-app-capable" content="yes">
-        <link rel="apple-touch-icon" href="images/icon.png">
+        <link rel="apple-touch-icon" href="images/icon.png"> <!-- icon.png 57x57; icon@2x.png 114x114 -->
 
         <!--                                     -->
         <!-- Mobile application                  -->
@@ -37,7 +37,7 @@
             <aside data-role="panel" id="left-panel" data-theme="c">
                 <ul data-role="listview" data-theme="a">
                     <li data-icon="delete"><a href="#" data-rel="close">Close</a></li>
-                    <li><input type="text" name="address" id="address" value="" data-mini="true" placeholder="Enter an address"  />
+                    <li><input type="text" name="address" id="address" value="" data-mini="true" placeholder="Enter an address" data-clear-btn="true"  />
                         <a href="index.html" id="address_search" data-role="button" data-inline="true" data-theme="b" data-mini="true" data-icon="refresh" data-rel="close">Search</a><br></li>
                     <li data-role="list-divider">Select a City</li>
                     <li><a href="#" class="city" data-rel="close">Boston</a> </li>
@@ -66,6 +66,7 @@
 
         <script>
 
+            /* cityCoords formatting for hard-wired locations in the panel */
             var cities = {  "washington dc" : { coords : { latitude : 38.882786, longitude : -77.109812}},
                             "haddonfield" :   { coords : { latitude : 39.889464, longitude : -75.042394}},
                             "newtown" :       { coords : { latitude : 40.230926, longitude : -74.932682}},
@@ -76,6 +77,7 @@
                             "current location" : ""
                          };
 
+            /* connect Dark Sky descriptions with Meteocons Weather Icon identifiers */
             var icons = {   "clear-day" : "B",
                             "clear-night" : "C",
                             "rain " : "R",
@@ -91,6 +93,11 @@
                             "tornado" : "F"
                         };
 
+            /**
+             * retrieve cityCoords data from hard-wired list and call loadWeather
+             *
+             * @param {string} city the name of a city in the list of hard-wired locations in the panel
+             */
             function loadCity(city) {
                 $("#location").html(city);
 
@@ -112,6 +119,7 @@
                 }
             }
 
+            /** default onload */
             function loadDefaultCity() {
                 loadCity("Boston");
             }
@@ -120,6 +128,7 @@
              * send API call to Dark City weather
              *
              * @param {object} cityCoords
+             *                 { coords : { latitude : , longitude : }}
              */
             function loadWeather(cityCoords) {
 
@@ -149,13 +158,13 @@
              * @param {string} address formatted with '+' for blanks
              */
             function loadLatLng(address) {
-                address = address.replace(/\s+/g, '+');
+                address = address.replace(/\s+/g, '+');       // replace blanks with '+'
 
                 $.ajax({
                     url: 'geocoder_api.php',                  //the script to call to get data
                     data: "address=" + address,               //url arguments to geocoder_api.php
                     dataType: 'json',                         //data format
-                    success: function(json)                   //on receipt of reply
+                    success: function(json)
                     {
                         console.log(json);
                         if (json.status == "OK") {
