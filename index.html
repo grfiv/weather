@@ -37,8 +37,9 @@
             <aside data-role="panel" id="left-panel" data-theme="c">
                 <ul data-role="listview" data-theme="a">
                     <li data-icon="delete"><a href="#" data-rel="close">Close</a></li>
+                    <li><input type="text" name="address" id="address" value="" data-mini="true" placeholder="Enter an address"  />
+                        <a href="index.html" id="address_search" data-role="button" data-inline="true" data-theme="b" data-mini="true" data-icon="refresh" data-rel="close">Search</a><br></li>
                     <li data-role="list-divider">Select a City</li>
-                    <li><a href="#" class="city" data-rel="close">Current Location</a> </li>
                     <li><a href="#" class="city" data-rel="close">Boston</a> </li>
                     <li><a href="#" class="city" data-rel="close">Newtown</a> </li>
                     <li><a href="#" class="city" data-rel="close">Haddonfield</a> </li>
@@ -93,6 +94,7 @@
             function loadCity(city) {
                 $("#location").html(city);
 
+                // deprecated since the inclusion of the address search function
                 if (city.toLowerCase() == "current location") {
                     if (navigator.geolocation) {
                         // call the HTML5 geolocation api: callbacks success, failure
@@ -114,16 +116,21 @@
                 loadCity("Boston");
             }
 
+            /**
+             * send API call to Dark City weather
+             *
+             * @param {object} cityCoords
+             */
             function loadWeather(cityCoords) {
 
                 var lat = cityCoords.coords.latitude;
                 var lon = cityCoords.coords.longitude;
 
                 $.ajax({
-                    url: 'weather_api.php',                  //the script to call to get data
-                    data: "lat=" + lat + "&lon=" + lon,                        //you can insert url argumnets here to pass to api.php
-                    dataType: 'json',                //data format
-                    success: function(json)          //on recieve of reply
+                    url: 'weather_api.php',                  // the script to call to get data
+                    data: "lat=" + lat + "&lon=" + lon,      // insert url arguments to pass to weather_api.php
+                    dataType: 'json',                        // data format
+                    success: function(json)                  // on receipt of reply
                     {
                         console.log(json);
                         $("#current_temp").html("&nbsp;&nbsp;" + Math.round(json.currently.temperature)+"&#176;F");
@@ -136,6 +143,43 @@
                 });
             }
 
+            /**
+             * send API call to Google Geodecoder
+             *
+             * @param {string} address formatted with '+' for blanks
+             */
+            function loadLatLng(address) {
+                address = address.replace(/\s+/g, '+');
+
+                $.ajax({
+                    url: 'geocoder_api.php',                  //the script to call to get data
+                    data: "address=" + address,               //url arguments to geocoder_api.php
+                    dataType: 'json',                         //data format
+                    success: function(json)                   //on receipt of reply
+                    {
+                        console.log(json);
+                        if (json.status == "OK") {
+                            var cityCoords = {
+                                coords: {
+                                    latitude: json.results[0].geometry.location.lat,
+                                    longitude: json.results[0].geometry.location.lng
+                                }
+                            };
+                            $("#location").html(json.results[0].formatted_address);
+                            loadWeather(cityCoords);
+                        } else {
+                            alert("Sorry, the address you entered was not recognized");
+                        }
+                    },
+                    error: function(e) {
+                        console.log(e.message);
+                    }
+                });
+            }
+
+            /**
+             * functions to call after the page is loaded
+             */
             $(document).ready(function () {
 
                 loadCity("Boston");
@@ -143,6 +187,13 @@
                 // change the city onclick of any a.city anchor
                 $("a.city").bind("click", function() {
                    loadCity($(this).html());
+                });
+
+                // search for an address
+                $('#address_search').bind("click", function() {
+                    if ($('#address').val()) {
+                        loadLatLng($('#address').val());
+                    }
                 });
 
             });

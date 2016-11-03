@@ -1,15 +1,13 @@
-#Responsive Mobile Weather App
+#Mobile Weather App
 
 ###Retrieve real-time weather data    
 
-* HTML5, CSS3
+#####Either for pre-set locations or via address lookup
+
+* HTML5, CSS3, javascript
 * AJAX / PHP
 * jQuery
 * jQuery Mobile
-
-
-    
-
 
 Citations:   
 
@@ -20,5 +18,6 @@ Citations:
 * [Download a URL's Content Using PHP cURL](https://davidwalsh.name/curl-download)   
 * [Using JQuery AJAX and php](https://openenergymonitor.org/emon/node/107)   
 * [Get Latitude and Longitude](http://www.latlong.net/)   
+* [Google Maps APIs > Geocoding API](https://developers.google.com/maps/documentation/geocoding/start?hl=en_US)
 
-NOTE: I've restricted the distribution on the web to only a few IP ranges relating to myself to avoid people abusing the weather API.
+
