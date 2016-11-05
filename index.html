@@ -12,7 +12,7 @@
         <!-- George Fisher                       -->
         <!-- https://github.com/grfiv/weather    -->
         <!--                                     -->
-        <title>Real-Time Weather</title>
+        <title>grf Weather</title>
 
         <!-- jQuery -->
         <script src="js/jquery-latest.min.js" integrity="sha384-UM1JrZIpBwVf5jj9dTKVvGiiZPZTLVoq4sfdvIe9SBumsvCuv6AHDNtEiIb5h1kU"></script>
@@ -39,10 +39,10 @@
                     <li data-icon="delete"><a href="#" data-rel="close">Close</a></li>
                     <li><input type="text" name="address" id="address" value="" data-mini="true" placeholder="Enter an address" data-clear-btn="true"  />
                         <a href="index.html" id="address_search" data-role="button" data-inline="true" data-theme="b" data-mini="true" data-icon="refresh" data-rel="close">Search</a><br></li>
+                    <li data-role="list-divider"></li>
+                    <li><a href="#" class="city" data-rel="close">Current Location</a> </li>
                     <li data-role="list-divider">Select a City</li>
-                    <li><a href="#" class="city" data-rel="close">Boston</a> </li>
                     <li><a href="#" class="city" data-rel="close">Newtown</a> </li>
-                    <li><a href="#" class="city" data-rel="close">Haddonfield</a> </li>
                     <li><a href="#" class="city" data-rel="close">Washington DC</a> </li>
                     <li><a href="#" class="city" data-rel="close">Grasslands National Park</a> </li>
                     <li><a href="#" class="city" data-rel="close">Machu Picchu</a> </li>
@@ -52,7 +52,7 @@
 
             <!-- header, content of the main page -->
             <header data-role="header" data-position="fixed" data-theme="c">
-                <h1>Real-Time Weather</h1>
+                <h1>grf Weather</h1>
                 <a href="#left-panel" data-role="button" data-icon="bars" data-iconpos="notext" data-iconshadow="false">Menu</a>
             </header>
 
@@ -70,7 +70,6 @@
             var cities = {  "washington dc" : { coords : { latitude : 38.882786, longitude : -77.109812}},
                             "haddonfield" :   { coords : { latitude : 39.889464, longitude : -75.042394}},
                             "newtown" :       { coords : { latitude : 40.230926, longitude : -74.932682}},
-                            "boston" :        { coords : { latitude : 42.374894, longitude : -71.050674}},
                  "grasslands national park" : { coords : { latitude : 49.125097, longitude : -107.421332}},
                             "mount everest" : { coords : { latitude : 27.987850, longitude : 86.925026}},
                             "machu picchu" :  { coords : { latitude : -13.163141, longitude : -72.544963}},
@@ -121,7 +120,7 @@
 
             /** default onload */
             function loadDefaultCity() {
-                loadCity("Boston");
+                loadCity("newtown");
             }
 
             /**
@@ -136,9 +135,17 @@
                 var lon = cityCoords.coords.longitude;
 
                 $.ajax({
+                    type: "GET",
                     url: 'weather_api.php',                  // the script to call to get data
                     data: "lat=" + lat + "&lon=" + lon,      // insert url arguments to pass to weather_api.php
-                    dataType: 'json',                        // data format
+
+                    /*contentType: 'application/javascript',
+                    dataType: "jsonp",
+                    jsonp: 'callback',
+                    jsonpCallback: 'jsonpCallback',*/
+
+                    contentType: 'application/json',
+                    dataType: 'json',
                     success: function(json)                  // on receipt of reply
                     {
                         console.log(json);
@@ -161,9 +168,11 @@
                 address = address.replace(/\s+/g, '+');       // replace blanks with '+'
 
                 $.ajax({
+                    type: "GET",
                     url: 'geocoder_api.php',                  //the script to call to get data
                     data: "address=" + address,               //url arguments to geocoder_api.php
                     dataType: 'json',                         //data format
+                    contentType: 'application/json',
                     success: function(json)
                     {
                         console.log(json);
@@ -191,7 +200,7 @@
              */
             $(document).ready(function () {
 
-                loadCity("Boston");
+                loadCity("current location");
 
                 // change the city onclick of any a.city anchor
                 $("a.city").bind("click", function() {

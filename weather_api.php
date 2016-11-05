@@ -7,10 +7,19 @@
 
 # get lat/lon if request properly formatted; else send error
 # ==========================================================
-if (isset($_GET['lat']) &&  isset($_GET['lon'])) {
+if (isset($_GET['callback'])) {
+    header("Content-Type: application/javascript");
+    $json_msg = array();
+    $json_msg['status']  = 'error';
+    $json_msg['error']   = 'jsonp is not supported';
+    echo $_GET['callback'] . "(". json_encode($json_msg) . ")";
+    exit;
+
+} elseif (isset($_GET['lat']) &&  isset($_GET['lon'])) {
     $lat = (float) $_GET['lat'];
     $lon = (float) $_GET['lon'];
-} else {
+
+}  else {
     header('Content-type: application/json');
     $json_msg = array();
     $json_msg['status']  = 'error';
